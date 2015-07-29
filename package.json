@@ -1,6 +1,6 @@
 {
   "name": "aws-lambda-invoke",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Library that makes it easier to invoke lambda functions with promises.",
   "main": "index.js",
   "scripts": {
