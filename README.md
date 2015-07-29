@@ -10,14 +10,22 @@ npm install --save aws-lambda-invoke
 
 ## Usage
 
+Load the library and pass in the `AWS` library.
+
+```javascript
+var AWS = require('aws-sdk'),
+    lambda = require('aws-lambda-invoke')(AWS);
+```
+
+Why am I not embedding the `aws-sdk` in the library? This is because in AWS Lambda, the `aws-sdk` is globally available for you to use. By not
+embedding the `aws-sdk` library, you can keep the footprint of the lambda build smaller.
+
 ### Sychronous
 
 The `invoke` method calls the lambda function synchronously. This means that it will wait untill the called lambda function
 returns a result or fails.
 
 ```javascript
-var lambda = require('aws-lambda-invoke');
-
 // Invoke the function
 lambda.invoke('MyLambdaFunction', {hello: 'world'})
     .then(function(result) {
@@ -33,8 +41,6 @@ lambda.invoke('MyLambdaFunction', {hello: 'world'})
 If you don't have to wait for the response of the lambda function you can use the `invokeAsync` method.
 
 ```javascript
-var lambda = require('aws-lambda-invoke');
-
 // Invoke the function
 lambda.invokeAsync('MyLambdaFunction', {hello: 'world'})
     .then(function() {
