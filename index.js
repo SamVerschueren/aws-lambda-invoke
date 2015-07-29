@@ -19,10 +19,10 @@ var Q = require('q');
      */
     module.exports = function(AWS) {
         // Constructs a new lambda function
-        this.raw = new AWS.Lambda();
+        module.exports.raw = new AWS.Lambda();
         
         // Return the exports object
-        return this;
+        return module.exports;
     };
    
     /**
