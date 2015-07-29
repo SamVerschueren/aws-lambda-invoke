@@ -8,47 +8,23 @@
  */
 
 // module dependencies
-var AWS = require('aws-sdk'),
-    Q = require('q');
+var Q = require('q');
 
-// Create the lambda function
-var lambda = new AWS.Lambda();
-
-module.exports = {
+(function() {
+   
     /**
-     * Invokes another lambda function asynchronously. This means that the InvocationType is set
-     * to `Event` and it will return after the invocation succeeded.
+     * Initializes the library by creating a new AWS.Lambda object.
      * 
-     * @param  {string}     name        The name of the lambda function to invoke.
-     * @param  {object}     payload     The payload that should be send to the lambda function.
-     * @return {Promise}                The promise object.
+     * @param {AWS}  AWS     The AWS object.
      */
-    invokeAsync: function(name, payload) {
-        return Q.promise(function(resolve, reject) {    
-            if(!name) {
-                // If the function is undefined, just resolve
-                throw new Error('Please provide a name')
-            }
-                
-            // Build up the message params
-            var params = {
-                FunctionName: name,
-                InvocationType: 'Event',
-                Payload: JSON.stringify(payload)
-            };
-            
-            // Invoke another lambda function
-            lambda.invoke(params, function(err, data) {
-                if(err) {
-                    // Reject if something went wrong
-                    return reject(err);
-                }
-                
-                // Resolve if everything went well
-                resolve();
-            })
-        });
-    },
+    module.exports = function(AWS) {
+        // Constructs a new lambda function
+        this.raw = new AWS.Lambda();
+        
+        // Return the exports object
+        return this;
+    };
+   
     /**
      * Invokes another lambda function synchronously. This means that the InvocationType is set
      * to `RequestResponse` and it will return after the called lambda function returns the result.
@@ -57,7 +33,9 @@ module.exports = {
      * @param  {object}     payload     The payload that should be send to the lambda function.
      * @return {Promise}                The promise object.
      */
-    invoke: function(name, payload) {
+    module.exports.invoke = function(name, payload) {
+        var lambda = this.raw;
+       
         return Q.promise(function(resolve, reject) {    
             if(!name) {
                 // If the function is undefined, just resolve
@@ -82,5 +60,42 @@ module.exports = {
                 resolve();
             })
         });
-    }
-};
+    };
+    
+    /**
+     * Invokes another lambda function asynchronously. This means that the InvocationType is set
+     * to `Event` and it will return after the invocation succeeded.
+     * 
+     * @param  {string}     name        The name of the lambda function to invoke.
+     * @param  {object}     payload     The payload that should be send to the lambda function.
+     * @return {Promise}                The promise object.
+     */
+    module.exports.invokeAsync = function(name, payload) {
+        var lambda = this.raw;
+        
+        return Q.promise(function(resolve, reject) {    
+            if(!name) {
+                // If the function is undefined, just resolve
+                throw new Error('Please provide a name')
+            }
+                
+            // Build up the message params
+            var params = {
+                FunctionName: name,
+                InvocationType: 'Event',
+                Payload: JSON.stringify(payload)
+            };
+            
+            // Invoke another lambda function
+            lambda.invoke(params, function(err, data) {
+                if(err) {
+                    // Reject if something went wrong
+                    return reject(err);
+                }
+                
+                // Resolve if everything went well
+                resolve();
+            })
+        });
+    };
+})();

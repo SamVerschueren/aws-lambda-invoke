@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/SamVerschueren/aws-lambda-invoke/issues"
   },
-  "homepage": "https://github.com/SamVerschueren/aws-lambda-invoke"
+  "homepage": "https://github.com/SamVerschueren/aws-lambda-invoke",
+  "dependencies": {
+    "q": "^1.4.1"
+  }
 }
