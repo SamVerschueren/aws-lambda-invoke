@@ -51,6 +51,28 @@ lambda.invokeAsync('MyLambdaFunction', {hello: 'world'})
     });
 ```
 
+### Raw Lambda
+
+If you want to do something with the lambda object created in the `aws-lambda-invoke` library, you can because the lambda function is stored
+in the `raw` property of the library.
+
+```javascript
+var params = {
+    FunctionName: 'MyLambdaFunction',
+    InvocationType: 'RequestResponse',
+    Payload: JSON.stringify({hello: 'world'})
+};
+
+lambda.raw.invoke(params, function(err, result) {
+    if(err) {
+        // Something went wrong    
+    }
+    else {
+        // Do something with the result of MyLambdaFunction
+    }
+});
+```
+
 ## Contributors
 
 - Sam Verschueren [<sam.verschueren@gmail.com>]
