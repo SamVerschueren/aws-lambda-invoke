@@ -57,7 +57,7 @@ var Q = require('q');
                 }
 
                 // Resolve if everything went well
-                resolve(data);
+                resolve(JSON.parse(data.Payload));
             })
         });
     };
