@@ -56,8 +56,14 @@ var Q = require('q');
                     return reject(err);
                 }
 
-                // Resolve if everything went well
-                resolve(JSON.parse(data.Payload));
+                try {
+                    // Try to parse the payload to JSON
+                    resolve(JSON.parse(data.Payload));
+                }
+                catch(e) {
+                    // Return the raw payload if it isn't JSON
+                    resolve(data.Payload);
+                }
             })
         });
     };
