@@ -56,14 +56,24 @@ var Q = require('q');
                     return reject(err);
                 }
 
+                // Store the payload in a temp variable
+                var payload = data.Payload;
+
                 try {
                     // Try to parse the payload to JSON
-                    resolve(JSON.parse(data.Payload));
+                    payload = JSON.parse(data.Payload);
+
+                    if(payload.errorMessage) {
+                        // If the payload has an errorMessage, reject the promise
+                        return reject(payload);
+                    }
                 }
                 catch(e) {
-                    // Return the raw payload if it isn't JSON
-                    resolve(data.Payload);
+                    // Do nothing if the payload is not JSON
                 }
+
+                // Resolve the payload
+                resolve(payload);
             })
         });
     };
