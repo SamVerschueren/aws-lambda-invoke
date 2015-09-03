@@ -65,7 +65,7 @@ var Q = require('q');
 
                     if(payload.errorMessage) {
                         // If the payload has an errorMessage, reject the promise
-                        return reject(payload);
+                        return reject(payload.errorMessage);
                     }
                 }
                 catch(e) {
