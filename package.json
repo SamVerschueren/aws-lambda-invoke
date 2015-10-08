@@ -4,7 +4,7 @@
   "description": "Library that makes it easier to invoke lambda functions with promises.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "xo && ava"
   },
   "repository": {
     "type": "git",
@@ -29,5 +29,16 @@
   "dependencies": {
     "pify": "^2.2.0",
     "pinkie-promise": "^1.0.0"
+  },
+  "devDependencies": {
+    "ava": "*",
+    "aws-sdk": "^2.2.8",
+    "sinon": "^1.17.1",
+    "xo": "*"
+  },
+  "xo": {
+    "ignores": [
+      "test.js"
+    ]
   }
 }
