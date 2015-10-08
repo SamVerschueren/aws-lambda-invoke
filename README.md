@@ -1,4 +1,4 @@
-# aws-lambda-invoke
+# aws-lambda-invoke [![Build Status](https://travis-ci.org/SamVerschueren/aws-lambda-invoke.svg?branch=master)](https://travis-ci.org/SamVerschueren/aws-lambda-invoke)
 
 > Library that makes it easier to invoke lambda functions with promises.
 
@@ -13,8 +13,8 @@ npm install --save aws-lambda-invoke
 Load the library and pass in the `AWS` library.
 
 ```javascript
-var AWS = require('aws-sdk'),
-    lambda = require('aws-lambda-invoke')(AWS);
+var AWS = require('aws-sdk');
+var lambda = require('aws-lambda-invoke')(AWS);
 ```
 
 Why am I not embedding the `aws-sdk` in the library? This is because in AWS Lambda, the `aws-sdk` is globally available for you to use. By not
@@ -31,9 +31,6 @@ lambda.invoke('MyLambdaFunction', {hello: 'world'})
     .then(function(result) {
         // Do something with the result of MyLambdaFunction
     })
-    .catch(function(err) {
-        // Something went wrong
-    });
 ```
 
 ### Asynchronous
@@ -45,9 +42,6 @@ If you don't have to wait for the response of the lambda function you can use th
 lambda.invokeAsync('MyLambdaFunction', {hello: 'world'})
     .then(function() {
         // The MyLambdaFunction is invoked successfully
-    })
-    .catch(function(err) {
-        // Something went wrong while invoke MyLambdaFunction
     });
 ```
 
@@ -64,14 +58,32 @@ var params = {
 };
 
 lambda.raw.invoke(params, function(err, result) {
-    if(err) {
-        // Something went wrong
-    }
-    else {
-        // Do something with the result of MyLambdaFunction
-    }
+    // Handle the result
 });
 ```
+
+## API
+
+### invoke(name, [payload])
+
+Returns a promise that resolves the payload returned by the invoked lambda function.
+
+### invokeAsync(name, [payload])
+
+Returns a promise that resolves nothing.
+
+#### name
+
+*Required*
+Type: `string`
+
+The name of the lambda function you want to invoke.
+
+#### payload
+
+Type: `object|string`
+
+The payload you want to send to the lambda function you are invoking.
 
 ## Contributors
 
