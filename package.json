@@ -18,7 +18,7 @@
     "q"
   ],
   "files": [
-      "index.js"
+    "index.js"
   ],
   "author": "Sam Verschueren",
   "license": "MIT",
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/SamVerschueren/aws-lambda-invoke",
   "dependencies": {
-    "q": "^1.4.1"
+    "pify": "^2.2.0",
+    "pinkie-promise": "^1.0.0"
   }
 }

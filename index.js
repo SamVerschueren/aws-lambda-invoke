@@ -3,115 +3,88 @@
 /**
  * Library that makes it easier to invoke lambda functions with promises.
  *
- * @author Sam Verschueren      <sam.verschueren@gmail.com>
+ * @author Sam Verschueren	  <sam.verschueren@gmail.com>
  * @since  29 Jul. 2015
  */
 
 // module dependencies
-var Q = require('q');
+var Promise = require('pinkie-promise');
+var pify = require('pify');
 
-(function() {
+/**
+ * Initializes the library by creating a new AWS.Lambda object.
+ *
+ * @param {AWS}  AWS	 The AWS object.
+ */
+module.exports = function (AWS) {
+	// Constructs a new lambda function
+	module.exports.raw = new AWS.Lambda();
 
-    /**
-     * Initializes the library by creating a new AWS.Lambda object.
-     *
-     * @param {AWS}  AWS     The AWS object.
-     */
-    module.exports = function(AWS) {
-        // Constructs a new lambda function
-        module.exports.raw = new AWS.Lambda();
+	// Return the exports object
+	return module.exports;
+};
 
-        // Return the exports object
-        return module.exports;
-    };
+/**
+ * Invokes another lambda function synchronously. This means that the InvocationType is set
+ * to `RequestResponse` and it will return after the called lambda function returns the result.
+ *
+ * @param  {string}	 name		The name of the lambda function to invoke.
+ * @param  {object}	 payload	The payload that should be send to the lambda function.
+ * @return {Promise}			The promise object.
+ */
+module.exports.invoke = function (name, payload) {
+	if (!name) {
+		// Reject if the name is not provided
+		return Promise.reject(new Error('Please provide a name'));
+	}
 
-    /**
-     * Invokes another lambda function synchronously. This means that the InvocationType is set
-     * to `RequestResponse` and it will return after the called lambda function returns the result.
-     *
-     * @param  {string}     name        The name of the lambda function to invoke.
-     * @param  {object}     payload     The payload that should be send to the lambda function.
-     * @return {Promise}                The promise object.
-     */
-    module.exports.invoke = function(name, payload) {
-        var lambda = this.raw;
+	// Build up the message params
+	var params = {
+		FunctionName: name,
+		InvocationType: 'RequestResponse',
+		Payload: JSON.stringify(payload)
+	};
 
-        return Q.promise(function(resolve, reject) {
-            if(!name) {
-                // If the function is undefined, just resolve
-                throw new Error('Please provide a name')
-            }
+	return pify(this.raw.invoke.bind(this.raw), Promise)(params)
+		.then(function (data) {
+			var payload = data.Payload;
 
-            // Build up the message params
-            var params = {
-                FunctionName: name,
-                InvocationType: 'RequestResponse',
-                Payload: JSON.stringify(payload)
-            };
+			try {
+				// Try to parse the payload as JSON
+				payload = JSON.parse(payload);
+			} catch (err) {
+				// Do nothing if the payload couln't be parsed
+			}
 
-            // Invoke another lambda function
-            lambda.invoke(params, function(err, data) {
-                if(err) {
-                    // Reject if something went wrong
-                    return reject(err);
-                }
+			if (payload && payload.errorMessage) {
+				// If the payload has an errorMessage, throw the error
+				throw new Error(payload.errorMessage);
+			}
 
-                // Store the payload in a temp variable
-                var payload = data.Payload;
+			return payload;
+		});
+};
 
-                try {
-                    // Try to parse the payload to JSON
-                    payload = JSON.parse(data.Payload);
+/**
+ * Invokes another lambda function asynchronously. This means that the InvocationType is set
+ * to `Event` and it will return after the invocation succeeded.
+ *
+ * @param  {string}	 name		The name of the lambda function to invoke.
+ * @param  {object}	 payload	The payload that should be send to the lambda function.
+ * @return {Promise}			The promise object.
+ */
+module.exports.invokeAsync = function (name, payload) {
+	if (!name) {
+		// Reject if the name is not provided
+		return Promise.reject(new Error('Please provide a name'));
+	}
 
-                    if(payload.errorMessage) {
-                        // If the payload has an errorMessage, reject the promise
-                        return reject(payload.errorMessage);
-                    }
-                }
-                catch(e) {
-                    // Do nothing if the payload is not JSON
-                }
+	// Build up the message params
+	var params = {
+		FunctionName: name,
+		InvocationType: 'Event',
+		Payload: JSON.stringify(payload)
+	};
 
-                // Resolve the payload
-                resolve(payload);
-            })
-        });
-    };
-
-    /**
-     * Invokes another lambda function asynchronously. This means that the InvocationType is set
-     * to `Event` and it will return after the invocation succeeded.
-     *
-     * @param  {string}     name        The name of the lambda function to invoke.
-     * @param  {object}     payload     The payload that should be send to the lambda function.
-     * @return {Promise}                The promise object.
-     */
-    module.exports.invokeAsync = function(name, payload) {
-        var lambda = this.raw;
-
-        return Q.promise(function(resolve, reject) {
-            if(!name) {
-                // If the function is undefined, just resolve
-                throw new Error('Please provide a name')
-            }
-
-            // Build up the message params
-            var params = {
-                FunctionName: name,
-                InvocationType: 'Event',
-                Payload: JSON.stringify(payload)
-            };
-
-            // Invoke another lambda function
-            lambda.invoke(params, function(err, data) {
-                if(err) {
-                    // Reject if something went wrong
-                    return reject(err);
-                }
-
-                // Resolve if everything went well
-                resolve();
-            })
-        });
-    };
-})();
+	return pify(this.raw.invoke.bind(this.raw), Promise)(params);
+};
