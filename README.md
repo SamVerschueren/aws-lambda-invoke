@@ -74,7 +74,7 @@ Returns a promise that resolves nothing.
 
 #### name
 
-*Required*
+*Required*  
 Type: `string`
 
 The name of the lambda function you want to invoke.
