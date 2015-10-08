@@ -65,7 +65,7 @@ var params = {
 
 lambda.raw.invoke(params, function(err, result) {
     if(err) {
-        // Something went wrong    
+        // Something went wrong
     }
     else {
         // Do something with the result of MyLambdaFunction
