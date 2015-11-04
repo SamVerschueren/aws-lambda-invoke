@@ -3,8 +3,6 @@ import AWS from 'aws-sdk';
 import sinon from 'sinon';
 import fn from './';
 
-const lambda = fn(AWS).raw;
-
 test('invoke rejects if name is not provided', async t => {
 	try {
 		await fn.invoke();
@@ -65,12 +63,7 @@ test.serial('invoke returns the raw payload if it isn\'t json', async t => {
 });
 
 test('invokeAsync rejects if name is not provided', async t => {
-	try {
-		await fn.invokeAsync();
-		t.fail();
-	} catch (err) {
-		t.pass();
-	}
+	await t.throws(fn.invokeAsync(), /Please provide a name/);
 });
 
 test.serial('invokeAsync should have been called with the correct params', async t => {
