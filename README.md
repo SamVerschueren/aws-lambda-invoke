@@ -1,11 +1,11 @@
 # aws-lambda-invoke [![Build Status](https://travis-ci.org/SamVerschueren/aws-lambda-invoke.svg?branch=master)](https://travis-ci.org/SamVerschueren/aws-lambda-invoke)
 
-> Library that makes it easier to invoke lambda functions with promises.
+> Invoke AWS Lambda functions with ease
 
 
 ## Installation
 
-```bash
+```
 npm install --save aws-lambda-invoke
 ```
 
@@ -20,26 +20,36 @@ SDK, you can keep te footprint of the lambda build is small as possible.
 The `invoke` method calls the lambda function synchronously. This means that it will wait untill the called lambda function
 returns a result or fails.
 
-```javascript
+```js
 const lambda = require('aws-lambda-invoke');
 
-lambda.invoke('MyLambdaFunction', {hello: 'world'})
-    .then(result => {
-        //=> {foo: 'bar'}
-    })
+lambda.invoke('MyLambdaFunction', {hello: 'world'}).then(result => {
+    console.log(result);
+    //=> '{"foo": "bar"}'
+});
+```
+
+Or with an alias
+
+```js
+const lambda = require('aws-lambda-invoke');
+
+lambda.invoke('MyLambdaFunction:production', {hello: 'world'}).then(result => {
+    console.log(result);
+    //=> '{"foo": "baz"}'
+});
 ```
 
 ### Asynchronous
 
 If you don't have to wait for the response of the lambda function you can use the `invokeAsync` method.
 
-```javascript
+```js
 const lambda = require('aws-lambda-invoke');
 
-lambda.invokeAsync('MyLambdaFunction', {hello: 'world'})
-    .then(() => {
-        // invoked successfully
-    });
+lambda.invokeAsync('MyLambdaFunction', {hello: 'world'}).then(() => {
+    // invoked successfully
+});
 ```
 
 ### Raw Lambda
@@ -47,17 +57,18 @@ lambda.invokeAsync('MyLambdaFunction', {hello: 'world'})
 If you want to do something with the lambda object created in the `aws-lambda-invoke` library, you can because the lambda function is stored
 in the `raw` property of the library.
 
-```javascript
+```js
 const lambda = require('aws-lambda-invoke');
 
 const params = {
     FunctionName: 'MyLambdaFunction',
+    Qualifier: 'my-alias',
     InvocationType: 'RequestResponse',
     Payload: JSON.stringify({hello: 'world'})
 };
 
-lambda.raw.invoke(params, (err, result) {
-    // Handle the result
+lambda.raw.invoke(params, (err, result) => {
+    // handle the result
 });
 ```
 
@@ -77,13 +88,13 @@ Returns a promise that resolves nothing.
 *Required*  
 Type: `string`
 
-The name of the lambda function you want to invoke.
+Name of the lambda function you want to invoke. You can append the `version` or `alias` to the name separated by a colon.
 
 #### payload
 
-Type: `object|string`
+Type: `object` `string`
 
-The payload you want to send to the lambda function you are invoking.
+Payload you want to send to the lambda function you are invoking.
 
 
 ## License
