@@ -31,12 +31,12 @@
   "homepage": "https://github.com/SamVerschueren/aws-lambda-invoke",
   "dependencies": {
     "parse-aws-lambda-name": "^1.0.0",
-    "pify": "^2.2.0",
-    "pinkie-promise": "^1.0.0"
+    "pify": "^2.3.0",
+    "pinkie-promise": "^2.0.0"
   },
   "devDependencies": {
     "ava": "*",
-    "aws-sdk": "^2.2.8",
+    "aws-sdk": "^2.2.33",
     "sinon": "^1.17.1",
     "xo": "*"
   }

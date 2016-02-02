@@ -85,7 +85,7 @@ Returns a promise that resolves nothing.
 
 #### name
 
-*Required*  
+*Required*
 Type: `string`
 
 Name of the lambda function you want to invoke. You can append the `version` or `alias` to the name separated by a colon.
@@ -99,4 +99,4 @@ Payload you want to send to the lambda function you are invoking.
 
 ## License
 
-MIT © Sam Verschueren
+MIT © [Sam Verschueren](https://github.com/SamVerschueren)
