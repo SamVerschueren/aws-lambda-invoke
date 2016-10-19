@@ -25,7 +25,7 @@ test.serial('invoke should have been called with the correct params', async t =>
 
 	await m.invoke('hello', {hello: 'world'});
 
-	t.same(m.raw.invoke.firstCall.args[0], {
+	t.deepEqual(m.raw.invoke.firstCall.args[0], {
 		FunctionName: 'hello',
 		InvocationType: 'RequestResponse',
 		Payload: '{"hello":"world"}'
@@ -37,7 +37,7 @@ test.serial('invoke version should have been called with the correct params', as
 
 	await m.invoke('hello:foo', {hello: 'world'});
 
-	t.same(m.raw.invoke.firstCall.args[0], {
+	t.deepEqual(m.raw.invoke.firstCall.args[0], {
 		FunctionName: 'hello',
 		Qualifier: 'foo',
 		InvocationType: 'RequestResponse',
@@ -49,7 +49,7 @@ test.serial('invoke returns the payload', async t => {
 	stub({Payload: '{"foo": "bar"}'});
 
 	const result = await m.invoke('hello', {hello: 'world'});
-	t.same(result, {foo: 'bar'});
+	t.deepEqual(result, {foo: 'bar'});
 });
 
 test.serial('invoke rejects if the result has an errorMessage', async t => {
@@ -73,7 +73,7 @@ test.serial('invokeAsync should have been called with the correct params', async
 
 	await m.invokeAsync('hello', {hello: 'world'});
 
-	t.same(m.raw.invoke.firstCall.args[0], {
+	t.deepEqual(m.raw.invoke.firstCall.args[0], {
 		FunctionName: 'hello',
 		InvocationType: 'Event',
 		Payload: '{"hello":"world"}'
@@ -85,7 +85,7 @@ test.serial('invokeAsync version should have been called with the correct params
 
 	await m.invokeAsync('hello:foo', {hello: 'world'});
 
-	t.same(m.raw.invoke.firstCall.args[0], {
+	t.deepEqual(m.raw.invoke.firstCall.args[0], {
 		FunctionName: 'hello',
 		Qualifier: 'foo',
 		InvocationType: 'Event',
@@ -96,5 +96,5 @@ test.serial('invokeAsync version should have been called with the correct params
 test.serial('invokeAsync returns the raw result', async t => {
 	stub({status: 'OK'});
 
-	t.same(await m.invokeAsync('hello', {hello: 'world'}), {status: 'OK'});
+	t.deepEqual(await m.invokeAsync('hello', {hello: 'world'}), {status: 'OK'});
 });

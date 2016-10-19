@@ -24,13 +24,15 @@
   ],
   "dependencies": {
     "parse-aws-lambda-name": "^1.0.0",
-    "pify": "^2.3.0",
-    "pinkie-promise": "^2.0.0"
+    "pify": "^2.3.0"
   },
   "devDependencies": {
     "ava": "*",
     "aws-sdk": "^2.2.33",
     "sinon": "^1.17.1",
     "xo": "*"
+  },
+  "xo": {
+    "esnext": true
   }
 }

@@ -85,7 +85,7 @@ Returns a promise that resolves nothing.
 
 #### name
 
-*Required*
+*Required*<br>
 Type: `string`
 
 Name of the lambda function you want to invoke. You can append the `version` or `alias` to the name separated by a colon.

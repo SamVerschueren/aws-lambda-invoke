@@ -1,23 +1,22 @@
 'use strict';
-var AWS = require('aws-sdk');
-var Promise = require('pinkie-promise');
-var pify = require('pify');
-var parse = require('parse-aws-lambda-name');
+const AWS = require('aws-sdk');
+const pify = require('pify');
+const parse = require('parse-aws-lambda-name');
 
 module.exports.raw = new AWS.Lambda();
 
-module.exports.invoke = function (name, payload) {
+module.exports.invoke = (name, payload) => {
 	if (!name) {
 		return Promise.reject(new TypeError('Please provide a name'));
 	}
 
-	var parsed = parse(name);
+	const parsed = parse(name);
 
 	if (!parsed) {
 		return Promise.reject(new Error('Please provide a valid function name'));
 	}
 
-	var params = {
+	const params = {
 		FunctionName: parsed.functionName,
 		InvocationType: 'RequestResponse',
 		Payload: JSON.stringify(payload)
@@ -27,9 +26,9 @@ module.exports.invoke = function (name, payload) {
 		params.Qualifier = parsed.qualifier;
 	}
 
-	return pify(this.raw.invoke.bind(this.raw), Promise)(params)
-		.then(function (data) {
-			var payload = data.Payload;
+	return pify(this.raw.invoke.bind(this.raw))(params)
+		.then(data => {
+			let payload = data.Payload;
 
 			try {
 				payload = JSON.parse(payload);
@@ -45,18 +44,18 @@ module.exports.invoke = function (name, payload) {
 		});
 };
 
-module.exports.invokeAsync = function (name, payload) {
+module.exports.invokeAsync = (name, payload) => {
 	if (!name) {
 		return Promise.reject(new Error('Please provide a name'));
 	}
 
-	var parsed = parse(name);
+	const parsed = parse(name);
 
 	if (!parsed) {
 		return Promise.reject(new Error('Please provide a valid function name'));
 	}
 
-	var params = {
+	const params = {
 		FunctionName: parsed.functionName,
 		InvocationType: 'Event',
 		Payload: JSON.stringify(payload)
