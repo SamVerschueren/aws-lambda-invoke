@@ -2,14 +2,16 @@
   "name": "aws-lambda-invoke",
   "version": "2.1.1",
   "description": "Invoke AWS Lambda functions with ease",
+  "license": "MIT",
+  "repository": "SamVerschueren/aws-lambda-invoke",
+  "author": "Sam Verschueren",
   "main": "index.js",
   "scripts": {
     "test": "xo && ava"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SamVerschueren/aws-lambda-invoke.git"
-  },
+  "files": [
+    "index.js"
+  ],
   "keywords": [
     "aws",
     "lambda",
@@ -20,15 +22,6 @@
     "version",
     "alias"
   ],
-  "files": [
-    "index.js"
-  ],
-  "author": "Sam Verschueren",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/SamVerschueren/aws-lambda-invoke/issues"
-  },
-  "homepage": "https://github.com/SamVerschueren/aws-lambda-invoke",
   "dependencies": {
     "parse-aws-lambda-name": "^1.0.0",
     "pify": "^2.3.0",
