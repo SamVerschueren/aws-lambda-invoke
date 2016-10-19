@@ -1,6 +1,6 @@
 {
   "name": "aws-lambda-invoke",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "description": "Invoke AWS Lambda functions with ease",
   "license": "MIT",
   "repository": "SamVerschueren/aws-lambda-invoke",
