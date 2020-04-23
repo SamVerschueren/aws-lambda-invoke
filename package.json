@@ -23,16 +23,23 @@
     "alias"
   ],
   "dependencies": {
-    "parse-aws-lambda-name": "^1.0.0",
-    "pify": "^2.3.0"
+    "parse-aws-lambda-name": "^1.0.0"
   },
   "devDependencies": {
-    "ava": "*",
-    "aws-sdk": "^2.2.33",
-    "sinon": "^1.17.1",
-    "xo": "*"
+    "ava": "^3.7.1",
+    "aws-sdk": "^2.660.0",
+    "sinon": "^9.0.2",
+    "xo": "^0.29.1"
+  },
+  "peerDependencies": {
+    "aws-sdk": "^2.660.0"
   },
   "xo": {
     "esnext": true
+  },
+  "ava": {
+    "files": [
+      "tests/test.js"
+    ]
   }
 }
